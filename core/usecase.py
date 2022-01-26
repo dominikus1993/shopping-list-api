@@ -46,3 +46,16 @@ class RemoveItemFromCustomerShoppingListUseCase:
         basket.remove_item(Item(item.item_id, item.item_quantity))
         await self.__writer.store(basket)
                 
+class GetCustomerShoppingListUseCase:
+    __reader: CustomerShoppingListReader
+
+    def __init__(self, reader: CustomerShoppingListReader) -> None:
+        self.__reader = reader
+
+    async def execute(self, customer_id:int):
+        customer_id = CustomerID(customer_id)
+        basket = await self.__reader.get(customer_id)
+        if basket is None:
+            return empty_shopping_list(customer_id)
+        else: 
+            basket

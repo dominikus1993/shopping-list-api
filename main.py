@@ -10,7 +10,7 @@ async def read_root(name: str):
 
 
 @app.get("/{customer_id}")
-async def read_item(customer_id: int, q: Optional[str] = None):
+async def read_item(customer_id: int):
     result = [{"id": customer_id, "name": "John"}]
     return result
 

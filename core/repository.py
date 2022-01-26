@@ -33,6 +33,16 @@ class CustomerShoppingList:
         else:
             self.items[index].add_item_quantity(item.item_quantity)
 
+    def remove_item(self, item: Item) -> None:
+        index = find_index_by(self.items, lambda item: item.item_id == item.item_id)
+        if  index == -1:
+            return 
+        else:
+            basket_item = self.items[index]
+            basket_item.sub_item_quantity(item.item_quantity)
+            if not basket_item.has_items():
+                self.items.remove(basket_item)
+
 def empty_shopping_list(customer_id: CustomerID) -> CustomerShoppingList:
     return CustomerShoppingList(customer_id, [])
 

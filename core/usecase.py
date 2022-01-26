@@ -20,6 +20,6 @@ class AddItemToCustomerShoppingListUseCase:
         customer_id = CustomerID(item.customer_id)
         basket = await self.__reader.get(customer_id)
         customer_basket = empty_shopping_list(customer_id) if basket is None else basket
-        customer_basket.items.append(Item(item.item_quantity, item.item_id))
-        await self.__writer.store(basket)
+        customer_basket.add_item(Item(item.item_id, item.item_quantity))
+        await self.__writer.store(customer_basket)
         

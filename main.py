@@ -9,9 +9,9 @@ app = FastAPI()
 
 get_customer_items = GetCustomerShoppingListUseCase(DaprCustomerShoppingListReader())
 
-@app.get("/{name}")
-async def read_root(name: str):
-    return {"Hello": name}
+@app.get("/ping")
+def ping():
+    return {"message": "pong"}
 
 @app.get("/{customer_id}", response_model=CustomerShoppingListDto)
 async def read_item(customer_id: int):

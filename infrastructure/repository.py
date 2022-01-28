@@ -9,7 +9,7 @@ class DaprCustomerShoppingListReader(CustomerShoppingListReader):
     async def get(self, customer_id: CustomerID):
         with DaprClient() as client:
             result = client.get_state(
-                'customer-shopping-list',
+                'statestore',
                 str(customer_id)
             )           
             if result is None:

@@ -18,9 +18,8 @@ class Item:
         self.item_quantity -= quantity 
     
     def has_items(self) -> bool:
-        return self.item_quantity > 0       
+        return self.item_quantity > 0   
         
-
 @dataclass
 class CustomerShoppingList:
     customer_id: CustomerID
@@ -28,7 +27,7 @@ class CustomerShoppingList:
     
     def add_item(self, item: Item) -> None:
         index = find_index_by(self.items, lambda item: item.item_id == item.item_id)
-        if  index == -1:
+        if index == -1:
             self.items.append(item)
         else:
             self.items[index].add_item_quantity(item.item_quantity)

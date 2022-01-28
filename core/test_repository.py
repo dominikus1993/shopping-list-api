@@ -17,7 +17,15 @@ class TestCustomerShoppingList(unittest.TestCase):
         subject.add_item(item)
         self.assertEqual(len(subject.items), 1)
         self.assertEqual(subject.items[0], Item(1, 3))
-        
+
+    def test_add_new_item_when_exists(self):
+        item = Item(2, 1)
+        subject = CustomerShoppingList(CustomerID(1), [Item(1, 2)])
+        subject.add_item(item)
+        self.assertEqual(len(subject.items), 2)
+        self.assertEqual(subject.items[0], Item(1, 2))
+        self.assertEqual(subject.items[1], Item(2, 1))
+
     def test_remove_item_when_basket_is_empty(self):
         item = Item(1, 1)
         subject = CustomerShoppingList(CustomerID(1), [])

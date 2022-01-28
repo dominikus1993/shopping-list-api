@@ -5,8 +5,8 @@ from dataclasses import dataclass
 @dataclass
 class AddItemToCustomerShoppingListCommand:
     customer_id: int
-    item_quantity: int
     item_id: int
+    item_quantity: int
     
 class AddItemToCustomerShoppingListUseCase:
     __reader: CustomerShoppingListReader

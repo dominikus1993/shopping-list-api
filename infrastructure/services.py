@@ -13,5 +13,5 @@ class DaprCustomerShoppingListMessagePublisher(CustomerShoppingListMessagePublis
 
     async def publish(self, message: CustomerShoppingListChanged | CustomerShoppingListRemoved):
         with DaprClient() as client:
-            client.publish_event("pubsub", "basket_events", json.dumps(message), data_content_type='application/json')
+            client.publish_event("pubsub", "basket_events", json.dumps(message, cls=EnhancedJSONEncoder), data_content_type='application/json')
     

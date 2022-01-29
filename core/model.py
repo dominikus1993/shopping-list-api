@@ -1,5 +1,5 @@
 from typing import NewType
-from attr import dataclass
+from dataclasses import dataclass
 from core.utils import find_index_by
 
 

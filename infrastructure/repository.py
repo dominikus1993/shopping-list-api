@@ -1,7 +1,6 @@
 import json
 from dapr.clients import DaprClient
 from dapr.clients.grpc._request import TransactionalStateOperation, TransactionOperationType
-from dapr.clients.grpc._state import StateItem
 from core.model import CustomerID, CustomerShoppingList, Item
 import dataclasses, json
 

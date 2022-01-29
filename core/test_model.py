@@ -1,7 +1,6 @@
-from re import sub
 import unittest
 
-from core.repository import CustomerID, CustomerShoppingList, Item
+from core.model import CustomerID, CustomerShoppingList, Item
 
 class TestCustomerShoppingList(unittest.TestCase):
     def test_add_item_when_basket_is_empty(self):

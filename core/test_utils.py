@@ -1,7 +1,7 @@
 from re import sub
 import unittest
 
-from core.repository import CustomerID, CustomerShoppingList, Item
+from core.model import CustomerID, CustomerShoppingList, Item
 from core.utils import find_index_by
 
 class TestUtils(unittest.TestCase):

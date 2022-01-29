@@ -1,6 +1,8 @@
-
-from core.repository import CustomerID, CustomerShoppingList, CustomerShoppingListReader, CustomerShoppingListWriter, Item, empty_shopping_list
+from core.dto import CustomerShoppingListDto
+from core.model import CustomerID, Item, empty_shopping_list
+from core.repository import CustomerShoppingListReader, CustomerShoppingListWriter
 from dataclasses import dataclass
+from core.services import CustomerShoppingListChanged, CustomerShoppingListMessagePublisher, CustomerShoppingListRemoved
 
 @dataclass
 class AddItemToCustomerShoppingListCommand:
@@ -45,25 +47,6 @@ class RemoveItemFromCustomerShoppingListUseCase:
             basket.remove_item(Item(item.item_id, item.item_quantity))
             await self.__writer.store(basket)
       
-      
-
-@dataclass
-class ItemDto:
-    item_id: int
-    item_quantity: int
-    
-    @staticmethod
-    def from_item(item: Item):
-        return ItemDto(item.item_id, item.item_quantity)
-    
-@dataclass
-class CustomerShoppingListDto:
-    customer_id: int
-    items: list[ItemDto]   
-    
-    @staticmethod
-    def from_basket(customer_basket: CustomerShoppingList):
-        return CustomerShoppingListDto(customer_basket.customer_id, [ItemDto.from_item(item) for item in customer_basket.items])
     
 class GetCustomerShoppingListUseCase:
     __reader: CustomerShoppingListReader
@@ -82,10 +65,12 @@ class GetCustomerShoppingListUseCase:
 class RemoveCustomerShoppingListUseCase:
     __reader: CustomerShoppingListReader
     __writer: CustomerShoppingListWriter
+    __publisher: CustomerShoppingListMessagePublisher
 
-    def __init__(self, reader: CustomerShoppingListReader, writer: CustomerShoppingListWriter) -> None:
+    def __init__(self, reader: CustomerShoppingListReader, writer: CustomerShoppingListWriter, publisher: CustomerShoppingListMessagePublisher) -> None:
         self.__reader = reader
         self.__writer = writer
+        self.__publisher = publisher
 
     async def execute(self, customer_id:int):
         customer_id = CustomerID(customer_id)
@@ -93,3 +78,4 @@ class RemoveCustomerShoppingListUseCase:
         
         if basket is not None:
             await self.__writer.remove(customer_id=customer_id)
+            await self.__publisher.publish(CustomerShoppingListRemoved(customer_id))

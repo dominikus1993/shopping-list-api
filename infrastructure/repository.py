@@ -2,8 +2,10 @@ import json
 from dapr.clients import DaprClient
 from dapr.clients.grpc._request import TransactionalStateOperation, TransactionOperationType
 from dapr.clients.grpc._state import StateItem
-from core.repository import CustomerID, CustomerShoppingList, CustomerShoppingListReader, CustomerShoppingListWriter, Item
+from core.model import CustomerID, CustomerShoppingList, Item
 import dataclasses, json
+
+from core.repository import CustomerShoppingListReader, CustomerShoppingListWriter
 
 class EnhancedJSONEncoder(json.JSONEncoder):
     def default(self, o):

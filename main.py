@@ -4,22 +4,24 @@ from fastapi import FastAPI
 from dapr.ext.fastapi import DaprApp
 import uvicorn
 from api.request import AddItemToCustomerShoppingListRequest, RemoveItemFromCustomerShoppingListRequest
+from core.dto import CustomerShoppingListDto
 
-from core.usecase import AddItemToCustomerShoppingListCommand, AddItemToCustomerShoppingListUseCase, CustomerShoppingListDto, GetCustomerShoppingListUseCase, RemoveCustomerShoppingListUseCase, RemoveItemFromCustomerShoppingListCommand, RemoveItemFromCustomerShoppingListUseCase
+from core.usecase import AddItemToCustomerShoppingListCommand, AddItemToCustomerShoppingListUseCase, GetCustomerShoppingListUseCase, RemoveCustomerShoppingListUseCase, RemoveItemFromCustomerShoppingListCommand, RemoveItemFromCustomerShoppingListUseCase
 from infrastructure.repository import DaprCustomerShoppingListReader, DaprCustomerShoppingListWriter
+from infrastructure.services import DaprCustomerShoppingListMessagePublisher
 
 app = FastAPI()
 dapr_app = DaprApp(app)
 get_customer_items = GetCustomerShoppingListUseCase(DaprCustomerShoppingListReader())
 add_item_uc = AddItemToCustomerShoppingListUseCase(DaprCustomerShoppingListReader(), DaprCustomerShoppingListWriter())
 remove_item_uc = RemoveItemFromCustomerShoppingListUseCase(DaprCustomerShoppingListReader(), DaprCustomerShoppingListWriter())
-remove_basket = RemoveCustomerShoppingListUseCase(DaprCustomerShoppingListReader(), DaprCustomerShoppingListWriter())
+remove_basket = RemoveCustomerShoppingListUseCase(DaprCustomerShoppingListReader(), DaprCustomerShoppingListWriter(), DaprCustomerShoppingListMessagePublisher())
 
 @app.get("/ping")
 def ping():
     return {"message": "pong"}
 
-@app.get("/basket/{customer_id}", response_model=CustomerShoppingListDto)
+@app.get("/basket/{customer_id}")
 async def read_item(customer_id: int):
     result = await get_customer_items.execute(customer_id)
     return result

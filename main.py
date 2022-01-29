@@ -1,4 +1,5 @@
 from re import I
+from typing import Any
 from fastapi import FastAPI
 from dapr.ext.fastapi import DaprApp
 import uvicorn
@@ -27,4 +28,5 @@ async def create_item(customer_id: int, item: AddItemToCustomerShoppingListReque
     return {"message": "ok"}
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    application: Any = app 
+    uvicorn.run(application, host="0.0.0.0", port=8000)

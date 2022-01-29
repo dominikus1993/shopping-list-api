@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Awaitable, Coroutine, NewType
 
-from core.utils import find_index_by
+from core.utils import FoundIndex, find_index_by
 
 CustomerID = NewType("CustomerID", int)
 
@@ -26,17 +26,15 @@ class CustomerShoppingList:
     items: list[Item]
     
     def add_item(self, item: Item) -> None:
-        index = find_index_by(self.items, lambda item: item.item_id == item.item_id)
-        if index == -1:
+        index = find_index_by(self.items, lambda i: i.item_id == item.item_id)
+        if index is None:
             self.items.append(item)
         else:
             self.items[index].add_item_quantity(item.item_quantity)
 
     def remove_item(self, item: Item) -> None:
         index = find_index_by(self.items, lambda item: item.item_id == item.item_id)
-        if  index == -1:
-            return 
-        else:
+        if  index is not None:
             basket_item = self.items[index]
             basket_item.sub_item_quantity(item.item_quantity)
             if not basket_item.has_items():

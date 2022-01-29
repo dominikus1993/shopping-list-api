@@ -10,3 +10,8 @@ class TestUtils(unittest.TestCase):
         subject = find_index_by(items, lambda item: item.item_id == 2)
         self.assertIsNotNone(subject)
         self.assertEqual(subject, 1)
+
+    def test_find_index_by_when_element__not_exists(self):
+        items = [Item(1, 1), Item(2, 2), Item(3, 3)]
+        subject = find_index_by(items, lambda item: item.item_id == 5)
+        self.assertIsNone(subject)

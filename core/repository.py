@@ -15,10 +15,10 @@ class Item:
         self.item_quantity += quantity
         
     def sub_item_quantity(self, quantity: int) -> None:
-        self.item_quantity -= quantity 
+        self.item_quantity -= quantity
     
     def has_items(self) -> bool:
-        return self.item_quantity > 0   
+        return self.item_quantity > 0  
         
 @dataclass
 class CustomerShoppingList:
@@ -33,7 +33,7 @@ class CustomerShoppingList:
             self.items[index].add_item_quantity(item.item_quantity)
 
     def remove_item(self, item: Item) -> None:
-        index = find_index_by(self.items, lambda item: item.item_id == item.item_id)
+        index = find_index_by(self.items, lambda i: i.item_id == item.item_id)
         if  index is not None:
             basket_item = self.items[index]
             basket_item.sub_item_quantity(item.item_quantity)
@@ -46,6 +46,10 @@ def empty_shopping_list(customer_id: CustomerID) -> CustomerShoppingList:
 class CustomerShoppingListWriter(ABC):
     @abstractmethod
     def store(self, customer_shopping_list: CustomerShoppingList) -> Coroutine:
+        pass
+
+    @abstractmethod
+    def remove(self, customer_id: CustomerID) -> Coroutine:
         pass
     
 

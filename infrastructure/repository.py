@@ -1,5 +1,4 @@
 import json
-from typing import Awaitable
 from dapr.clients import DaprClient
 from dapr.clients.grpc._request import TransactionalStateOperation, TransactionOperationType
 from dapr.clients.grpc._state import StateItem
@@ -7,10 +6,10 @@ from core.repository import CustomerID, CustomerShoppingList, CustomerShoppingLi
 import dataclasses, json
 
 class EnhancedJSONEncoder(json.JSONEncoder):
-        def default(self, o):
-            if dataclasses.is_dataclass(o):
-                return dataclasses.asdict(o)
-            return super().default(o)
+    def default(self, o):
+        if dataclasses.is_dataclass(o):
+            return dataclasses.asdict(o)
+        return super().default(o)
 
 class DaprCustomerShoppingListReader(CustomerShoppingListReader):
 
@@ -39,3 +38,8 @@ class DaprCustomerShoppingListWriter(CustomerShoppingListWriter):
                     operation_type=TransactionOperationType.upsert,
                     key=str(customer_shopping_list.customer_id),
                     data=json.dumps(customer_shopping_list, cls=EnhancedJSONEncoder))])
+
+    async def remove(self, customer_id: CustomerID):
+        with DaprClient() as client:
+            client.delete_state(store_name='statestore', key=str(customer_id))
+
